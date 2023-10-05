@@ -12,8 +12,46 @@
           name: "John Doe",
           lastActive: "1 day ago",
         },
-        content: ""
-      }
+        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+      },
+      {
+        id: 1,
+        user: {
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+          name: "John Doe",
+          lastActive: "1 day ago",
+        },
+        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+      },
+      {
+        id: 1,
+        user: {
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+          name: "John Doe",
+          lastActive: "1 day ago",
+        },
+        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+      },
+      {
+        id: 1,
+        user: {
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+          name: "John Doe",
+          lastActive: "1 day ago",
+        },
+        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+      },
+      {
+        id: 1,
+        user: {
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
+          name: "John Doe",
+          lastActive: "1 day ago",
+        },
+        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
+      },
+
+
     ]
     modalShown = true;
   }
@@ -25,14 +63,18 @@
 </button>
 
 {#if modalShown}
-  <div in:fly out:fly id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-      <div class="relative w-full max-w-2xl max-h-full">
-          <!-- Modal content -->
-          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <!-- Modal header -->
+  <div in:fly={{ y: 200, duration: 500 }} out:fly={{ y: 200, duration: 500 }} id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed bg-gray-100/40 
+    top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden
+    md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
+    <button
+			class="w-full max-h-full cursor-default bg-black/50 h-full z-[51] absolute"
+			on:click={() => (modalShown = false)}
+		/>
+      <div class="relative w-full max-w-2xl z-[52] max-h-full">
+          <div class="relative w-full bg-white rounded shadow dark:bg-gray-700">
               <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                   <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                      Static modal
+                    By {post.user.name}
                   </h3>
                   <button on:click={() => modalShown = false} type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
                       <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -41,19 +83,36 @@
                       <span class="sr-only">Close modal</span>
                   </button>
               </div>
-              <!-- Modal body -->
-              <div class="p-6 space-y-6">
-                  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                      With less than a month to go before the European Union enacts new consumer privacy laws for its citizens, companies around the world are updating their terms of service agreements to comply.
-                  </p>
-                  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                      The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant to ensure a common set of data rights in the European Union. It requires organizations to notify users as soon as possible of high-risk data breaches that could personally affect them.
-                  </p>
+              <div class="overflow-y-auto p-6 space-y-6 max-h-[450px] sm:max-h-[600px]">
+                {#each post.comments as comment}
+                  <div class="flex w-full items-center p-2 space-x-2">
+                    <div id="toast-message-cta" class="w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow 
+                      dark:bg-gray-800 dark:text-gray-400" role="alert">
+                        <div class="flex">
+                            <img class="w-10 h-10 rounded-full object-center shadow-lg object-cover aspect-square" src={comment.user.image} alt={comment.user.name}/>
+                            <div class="ml-3 text-sm font-normal">
+                              <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">{comment.user.name}</span>
+                              <div class="mb-2 text-sm font-normal">{comment.content}</div> 
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                {/each}
               </div>
-              <!-- Modal footer -->
               <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                  <button data-modal-hide="staticModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I accept</button>
-                  <button data-modal-hide="staticModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
+                <form class="w-full">
+                   <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                       <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+                           <label for="comment" class="sr-only">Your comment</label>
+                           <textarea maxlength="300" id="comment" rows="4" class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea>
+                       </div>
+                       <div class="flex items-center justify-end px-3 py-2 border-t dark:border-gray-600">
+                           <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                               Post comment
+                           </button>
+                       </div>
+                   </div>
+                </form>
               </div>
           </div>
       </div>
