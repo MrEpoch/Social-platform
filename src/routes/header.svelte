@@ -2,4 +2,4 @@
 <script lang="ts">
 </script>
 
-<header></header>
+<header class="py-10 bg-stone-950"></header>

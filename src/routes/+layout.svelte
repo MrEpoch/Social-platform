@@ -4,17 +4,14 @@
 	import Header from './header.svelte';
 	import Transition from './transition.svelte';
   import { theme } from "lib/localStorage";
-
   export let data;
-
-  console.log($theme);
 </script>
 
 <svelte:head>
-	<meta name="color-scheme" content={$theme === "dark" ? 'dark' : 'light'} />
+	<meta name="color-scheme" content={$theme.current === "dark" ? 'dark' : 'light'} />
 </svelte:head>
 
-<div class="h-full w-full" class:dark={$theme === 'dark'}>
+<div class="h-full w-full" class:dark={$theme.current === 'dark'}>
     <Header />
     <Transition url={data.url}>
         <slot />
