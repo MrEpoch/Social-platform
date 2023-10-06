@@ -6,40 +6,44 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id   String  @unique @id @default(uuid())
+  id   String  @id @map("_id") @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime
 
-  username String @unique
+  username String  @unique
   email    String? @unique
   password String
+  likedPostsId String[]
 
-  posts    Post[] @relation(name: "post")
+  posts    Post[] @relation("post")
   comments Comment[]
-  likes    Post[] @relation(name: "like")
+  likedPosts Post[] @relation("likedBy", fields: [likedPostsId], references: [id])
 }
 
 model Post {
-  id   String  @unique @id @default(uuid())
+  id   String  @id @map("_id") @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime
 
   userId String
+  likedUsersId String[]
   content String
   images  String[]
   comments Comment[]
 
-  likes    Post[] @relation(name: "like")
-  user     User @relation(name: "post", fields: [userId], references: [id])
+  likeCount Int @default(0)
+
+  likedBy  User[] @relation("likedBy", fields: [likedUsersId], references: [id]) 
+  user     User @relation("post", fields: [userId], references: [id])
 }
 
 model Comment {
-  id   String  @unique @id @default(uuid())
+  id   String  @map("_id") @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime
 
@@ -50,3 +54,4 @@ model Comment {
   user    User @relation(fields: [userId], references: [id])
   post    Post @relation(fields: [postId], references: [id])
 }
+

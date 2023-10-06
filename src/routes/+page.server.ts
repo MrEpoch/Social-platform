@@ -27,5 +27,9 @@ export const load: PageServerLoad = ({ url }) => {
 export const actions: Actions = {
   like: async ({ request }) => {
     
+  },
+
+  comment: async ({ request }) => {
+    const data = await request.formData();
   }
 }

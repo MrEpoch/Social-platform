@@ -1,19 +1,26 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import CommentsModal from 'components/CommentsModal.svelte';
+  import { goto } from '$app/navigation';
   export let data;
   $: feeds = data.feeds;
   $: params_data = data.params_data;
+
 </script>
 
 <div class="w-full min-h-screen bg-stone-950 dark:text-white">
-  <div class="max-w-screen-xl mx-auto p-4 flex flex-col gap-3">
+  <div class="max-w-screen-xl mx-auto p-4 flex flex-col gap-8">
     <div class="flex gap-3 justify-between">  
       <h3 class="text-2xl font-bold text-white">Feeds</h3>
       <div class="flex rounded-lg bg-gray-200 dark:bg-gray-700">
-        <button class={"bg-gray-200 rounded-l-lg dark:bg-gray-700 px-4 py-2 max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] sm:px-6 sm:text-base text-sm" + " " + (params_data === "latest" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Latest</button>
-        <button class={"bg-gray-200 dark:bg-gray-700 py-2 px-4 sm:px-6 text-sm max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] sm:text-base" + " " + (params_data === "popular" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Popular</button>
-        <button class={"bg-gray-200 rounded-r-lg dark:bg-gray-700 sm:text-base max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] text-sm px-4 py-2 sm:px-6" + " " + (params_data === "random" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Random</button>
+        <button on:click={() => goto("/?type=latest", {
+            replaceState: true
+          })} class={"bg-gray-200 rounded-l-lg dark:bg-gray-700 px-4 py-2 max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] sm:px-6 sm:text-base text-sm" + " " + (params_data === "latest" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Latest</button>
+        <button on:click={() => goto("/?type=popular", {
+            replaceState: true
+          })}  class={"bg-gray-200 dark:bg-gray-700 py-2 px-4 sm:px-6 text-sm max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] sm:text-base" + " " + (params_data === "popular" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Popular</button>
+        <button on:click={() => goto("/?type=random", {
+          })}  class={"bg-gray-200 rounded-r-lg dark:bg-gray-700 sm:text-base max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] text-sm px-4 py-2 sm:px-6" + " " + (params_data === "random" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Random</button>
       </div>
     </div>
     <div class="flex flex-col gap-4 items-center h-full w-full">

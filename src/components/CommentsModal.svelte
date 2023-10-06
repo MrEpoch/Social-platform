@@ -50,8 +50,6 @@
         },
         content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
       },
-
-
     ]
     modalShown = true;
   }
@@ -67,6 +65,7 @@
     top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden
     md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
     <button
+      tabindex="-1"
 			class="w-full max-h-full cursor-default bg-black/50 h-full z-[51] absolute"
 			on:click={() => (modalShown = false)}
 		/>
@@ -100,7 +99,7 @@
                 {/each}
               </div>
               <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <form class="w-full">
+                <form method="POST" action="?/comment" class="w-full">
                    <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                        <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                            <label for="comment" class="sr-only">Your comment</label>

@@ -34,6 +34,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"appwrite": "^13.0.0",
+		"mongodb": "^6.1.0",
 		"svelte-local-storage-store": "^0.6.4"
 	}
 }
