@@ -13,7 +13,8 @@ datasource db {
 model User {
   id   String  @id @map("_id") @default(uuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
+  lastActive  DateTime @default(now())
 
   username String  @unique
   email    String? @unique
@@ -23,12 +24,34 @@ model User {
   posts    Post[] @relation("post")
   comments Comment[]
   likedPosts Post[] @relation("likedBy", fields: [likedPostsId], references: [id])
+
+  auth_session     Session[]
+  key         Key[]
+}
+
+model Session {
+    id              String           @id @map("_id")
+    user_id         String
+    active_expires  BigInt
+    idle_expires    BigInt
+    user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+}
+
+model Key {
+    id              String           @id @map("_id")
+    hashed_password String?
+    user_id         String
+    user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
 }
 
 model Post {
   id   String  @id @map("_id") @default(uuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt 
 
   userId String
   likedUsersId String[]
@@ -40,12 +63,14 @@ model Post {
 
   likedBy  User[] @relation("likedBy", fields: [likedUsersId], references: [id]) 
   user     User @relation("post", fields: [userId], references: [id])
+
+  @@unique([userId, id])
 }
 
 model Comment {
   id   String  @map("_id") @id @default(uuid())
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 
   postId  String
   userId  String
@@ -53,5 +78,6 @@ model Comment {
   
   user    User @relation(fields: [userId], references: [id])
   post    Post @relation(fields: [postId], references: [id])
+  
+  @@unique([userId, id, postId])
 }
-

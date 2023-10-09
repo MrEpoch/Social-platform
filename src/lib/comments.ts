@@ -1,35 +1,105 @@
 import { prisma } from "./db"
 
-export const getComments = async (type: "latest" | "popular" | "random") => {
-  const orderByValue = {
-    latest: {
-      createdAt: "desc"
-    },
-    popular: {
-      likes: "desc"
-    },
-    random: {
-      id: "asc"
+export const getComments = async (postId: string, loadMore=50, skip=0) => {
+  try {
+    return await prisma.comment.findMany({
+      where: {
+        postId
+      },
+      take: loadMore,
+      skip: skip
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "getComments"
     }
   }
+}
 
-  if (type === "random") {
-    return await prisma.comment.findMany({
-      orderBy: {
-        id: "asc"
+export const getCommentCount = async (postId: string) => {
+  try {
+    return await prisma.comment.count({
+      where: {
+        postId
       }
     })
-  } else if (type === "popular") {
-    return await prisma.comment.findMany({
-      orderBy: {
-        likes: "desc"
-      }
-    })
-  } else {
-    return await prisma.comment.findMany({
-      orderBy: {
-        createdAt: "desc"
-      }
-    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "getCommentCount"
+    }
   }
+}
+
+export const createComment = async (
+  postId: string,
+  userId: string,
+  content: string
+  ) => {
+  try {
+    return await prisma.comment.create({
+      data: {
+        postId,
+        userId,
+        content
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "createComment"
+    }
+  }
+}
+
+export const updateComment = async (
+  commentId: string,
+  postId: string,
+  userId: string,
+  content: string
+) => {
+  try {
+    return await prisma.comment.update({
+      where: {
+        userId_id_postId: {
+          id: commentId,
+          postId,
+          userId
+        }
+      },
+      data: {
+        content
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "updateComment"
+    }
+  }
+}
+
+export const deleteComment = async (commentId: string, userId: string, postId: string) => {
+  try {
+    return await prisma.comment.delete({
+      where: {
+        userId_id_postId: {
+          id: commentId,
+          postId,
+          userId
+        }
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "deleteComment"
+    }
+  } 
 }

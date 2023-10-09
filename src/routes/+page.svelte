@@ -2,14 +2,63 @@
 	import { enhance } from '$app/forms';
 	import CommentsModal from 'components/CommentsModal.svelte';
   import { goto } from '$app/navigation';
+
+  import { homePageErr } from "lib/errTypes";
+
   export let data;
   $: feeds = data.feeds;
   $: params_data = data.params_data;
+  import { posts } from 'lib/stores.js';
+ 	import { onMount } from 'svelte';
+ 	import { browser } from '$app/environment';
+	import MessagePanel from './MessagePanel.svelte';
+  const INITIAL_POSTS = 25;
+ 	posts.set(feeds);
+ 	let limit = INITIAL_POSTS;
+
+  let footer: any;
+
+	onMount(() => {
+		if (browser) {
+			const handleIntersect = (entries, observer) => {
+				entries.forEach((entry) => {
+					showMorePosts();
+				});
+			};
+			const options = { threshold: 0.5, rootMargin: '-100% 0% 100%' };
+			const observer = new IntersectionObserver(handleIntersect, options);
+			observer.observe(footer);
+		}
+	});
+
+  $: error = "";
+	$: showMorePosts;
+	async function showMorePosts() {
+		try {
+			const newLimit = limit + 25;
+				const response = await fetch('/api/posts', {
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ type: params_data, skip: limit, take: 25 }),
+				});
+        const newData = await response.json();
+        if (newData.error) {
+           error = homePageErr[newData.type as keyof typeof homePageErr] as string;
+        }
+				posts.set([...$posts, ...newData.posts]);
+				limit = newLimit;	
+		} catch (error) {
+			console.error('Error fetching more posts in index');
+		}
+	}
 
 </script>
 
 <div class="w-full min-h-screen bg-stone-950 dark:text-white">
-  <div class="max-w-screen-xl mx-auto p-4 flex flex-col gap-8">
+  <div class="max-w-screen-xl relative mx-auto p-4 flex flex-col gap-8">
     <div class="flex gap-3 justify-between">  
       <h3 class="text-2xl font-bold text-white">Feeds</h3>
       <div class="flex rounded-lg bg-gray-200 dark:bg-gray-700">
@@ -55,6 +104,8 @@
           </div>
         </div>
       {/each}
+      <MessagePanel />
     </div>
+    <div bind:this={footer} />
   </div> 
 </div>
