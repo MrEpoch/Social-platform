@@ -102,3 +102,69 @@ export const deletePost = async (postId: string, userId: string) => {
     }
   }
 }
+
+export const unlikePost = async (postId: string, userId: string) => {
+  try {
+    const post = await prisma.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        likeCount: {
+          decrement: 1
+        }
+      }
+    })
+    const user = await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        likedPosts: {
+          disconnect: {
+            id: postId
+          }
+        }
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "unlikePost"
+    }
+  }
+}
+
+export const likePost = async (postId: string, userId: string) => {
+  try {
+    const post = await prisma.post.update({
+      where: {
+        id: postId
+      },
+      data: {
+        likeCount: {
+          increment: 1
+        }
+      }
+    })
+    const user = await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        likedPosts: {
+          connect: {
+            id: postId
+          }
+        }
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return {
+      error: true,
+      type: "likePost"
+    }
+  }
+}
