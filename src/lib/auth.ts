@@ -7,11 +7,7 @@ import { dev } from "$app/environment";
 export const auth = lucia({
   env: dev ? "DEV" : "PROD",
   middleware: sveltekit(),
-	adapter: prisma(db, {
-		user: "user", // model User {}
-		key: "key", // model Key {}
-		session: "session" // model Session {}
-  }),
+	adapter: prisma(db),
   getUserAttributes: (data) => {
     return {
       username: data.username

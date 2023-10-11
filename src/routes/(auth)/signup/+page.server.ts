@@ -5,6 +5,7 @@ import { auth } from "lib/auth";
 export const actions: Actions = {
   default: async ({ request, locals }) => {
     try {
+      console.log("default");
       const data = await request.formData();
 
       const normalUsername = z.string().min(5);
@@ -32,7 +33,7 @@ export const actions: Actions = {
           password: password.data
         },
         attributes: {
-          username: username.data
+          username: username.data,
         }
       });
 

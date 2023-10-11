@@ -7,6 +7,9 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
         orderBy: {
           id: "asc",
         },
+        include: {
+          user: true
+        },
         take: loadMore,
         skip: skip
       })
@@ -15,6 +18,9 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
         orderBy: {
           likeCount: "desc"
         },
+        include: {
+          user: true
+        },
         take: loadMore,
         skip: skip
       })
@@ -22,6 +28,9 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
       return await prisma.post.findMany({
         orderBy: {
           createdAt: "desc"
+        },
+        include: {
+          user: true
         },
         take: loadMore,
         skip: skip
@@ -112,8 +121,13 @@ export const unlikePost = async (postId: string, userId: string) => {
       data: {
         likeCount: {
           decrement: 1
+        },
+        likedBy: {
+          disconnect: {
+            id: userId
+          }
         }
-      }
+      },
     })
     const user = await prisma.user.update({
       where: {
@@ -145,6 +159,11 @@ export const likePost = async (postId: string, userId: string) => {
       data: {
         likeCount: {
           increment: 1
+        },
+        likedBy: {
+          connect: {
+            id: userId
+          }
         }
       }
     })
@@ -157,7 +176,7 @@ export const likePost = async (postId: string, userId: string) => {
           connect: {
             id: postId
           }
-        }
+        },
       }
     })
   } catch (error) {

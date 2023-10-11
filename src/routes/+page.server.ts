@@ -4,9 +4,10 @@ import { createPost, getPosts } from "lib/posts";
 import { z } from "zod";
 import { createComment } from "lib/comments";
 
-export const load: PageServerLoad = ({ url }) => {
+export const load: PageServerLoad = async ({ url }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
-  const feeds = getPosts(params_data as "latest" | "popular" | "random", 25, 0);
+  const feeds = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
+  console.log(feeds);
 
   return {
     feeds,
