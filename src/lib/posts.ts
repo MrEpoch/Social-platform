@@ -7,8 +7,12 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
         orderBy: {
           id: "asc",
         },
-        include: {
-          user: true
+        select: {
+          id: true,
+          content: true,
+          images: true,
+          user: true,
+          likeCount: true,
         },
         take: loadMore,
         skip: skip
@@ -18,8 +22,12 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
         orderBy: {
           likeCount: "desc"
         },
-        include: {
-          user: true
+        select: {
+          id: true,
+          content: true,
+          images: true,
+          user: true,
+          likeCount: true,
         },
         take: loadMore,
         skip: skip
@@ -29,8 +37,12 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
         orderBy: {
           createdAt: "desc"
         },
-        include: {
-          user: true
+        select: {
+          id: true,
+          content: true,
+          images: true,
+          user: true,
+          likeCount: true,
         },
         take: loadMore,
         skip: skip

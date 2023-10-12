@@ -3,12 +3,20 @@ import type { PageServerLoad } from "./$types";
 import { createPost, getPosts } from "lib/posts";
 import { z } from "zod";
 import { createComment } from "lib/comments";
+import type { Post } from "@prisma/client";
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
-  const feeds = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
-  console.log(feeds);
-
+  const feeds_pre = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
+  const feeds = await Promise.all(
+		feeds_pre.map(async (feed: Post) => {
+			const { data } = supabase.storage
+				.from('velvet-line')
+				.getPublicUrl(`images/${feed.image}`);
+				feed.image = data.publicUrl;
+				return feed;
+		})
+	);
   return {
     feeds,
     params_data
@@ -74,6 +82,7 @@ export const actions: Actions = {
     const normal_post = z.string().min(3);
 
     const post_content = normal_post.safeParse(data.get("post_content"));
+    const post_images = data.get("post_images");
 
     if (!post_content.success) {
       return {

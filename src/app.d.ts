@@ -9,6 +9,7 @@ declare global {
   namespace App {
     interface Locals {
       auth: import("lucia").AuthRequest;
+      supabase: import("@supabase/auth-helpers-sveltekit").SupabaseClient;
     }
   }
 }

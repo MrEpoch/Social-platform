@@ -6,6 +6,7 @@
   import { homePageErr } from "lib/errTypes";
 
   export let data;
+  export let form;
   let feeds = data.feeds;
   $: params_data = data.params_data;
   $: session_data = data.session;
@@ -74,6 +75,9 @@
       </div>
     </div>
     <div class="flex flex-col gap-4 items-center h-full w-full">
+      {#if form?.error}
+        <p class="text-red-500">{form?.type}</p>
+      {/if}
       {#each $posts as feed}
         <div class="flex p-4 rounded-lg dark:bg-slate-800 dark:text-white bg-gray-200 flex-col gap-2">
           <div class="flex gap-4">

@@ -11,7 +11,7 @@
 	<meta name="color-scheme" content={$theme.current === "dark" ? 'dark' : 'light'} />
 </svelte:head>
 
-<div class="h-full w-full" class:dark={$theme.current === 'dark'}>
+<div class="h-full dark w-full" class:dark={$theme.current !== 'dark'}>
     <Header />
     <Transition url={data.url}>
         <slot />

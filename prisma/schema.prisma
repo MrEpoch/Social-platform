@@ -19,7 +19,7 @@ model User {
   username String  @unique
   email    String? @unique
   likedPostsId String[]
-  profilePicture  String
+  profilePicture  String @default("no-image")
 
   posts    Post[] @relation("post")
   comments Comment[]

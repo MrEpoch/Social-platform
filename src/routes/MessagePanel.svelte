@@ -1,12 +1,22 @@
+<script lang="ts">
+  let shownModal = false;
+</script>
+
 <form action="?/newPost" method="POST" class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
   <div class="max-w-screen-xl flex flex-col w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
   <div class="mb-6">
-    <input placeholder="My thoughs..." type="text" id="default-input" class="block
+    <input name="post_content" placeholder="My thoughs..." type="text" id="default-input" class="block
                 w-full p-3 bg-transparent text-[9px] sm:text-sm rounded-full
                 text-gray-900 border-[2px] border-gray-300 focus:ring-gray-500
                 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-499">
   </div>
+  <button type="submit" class="bg-violet-500 text-white font-medium rounded-lg text-sm px-5 w-fit py-2 text-center">Add Image</button>
   <button type="submit" class="bg-violet-800 text-white font-medium rounded-lg text-sm px-5 py-2 text-center">Submit</button>
   </div>
 </form>
+
+{#if shownModal}
+  *//////////**// HERE WILL BE MODAL 
+{/if}
+
