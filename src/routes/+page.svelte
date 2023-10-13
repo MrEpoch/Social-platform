@@ -37,7 +37,6 @@
 	$: showMorePosts;
 	async function showMorePosts() {
 		try {
-    console.log("instant");
 			const newLimit = limit + 25;
 				const response = await fetch('/api/posts', {
 					method: 'POST',

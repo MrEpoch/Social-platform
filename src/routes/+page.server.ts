@@ -83,6 +83,7 @@ export const actions: Actions = {
 
     const post_content = normal_post.safeParse(data.get("post_content"));
     const post_images = data.get("post_images");
+    console.log(post_images); 
 
     if (!post_content.success) {
       return {
