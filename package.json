@@ -39,6 +39,7 @@
 		"appwrite": "^13.0.0",
 		"lucia": "^2.7.1",
 		"mongodb": "^6.1.0",
+		"sharp": "^0.32.6",
 		"svelte-local-storage-store": "^0.6.4",
 		"zod": "^3.22.4"
 	}

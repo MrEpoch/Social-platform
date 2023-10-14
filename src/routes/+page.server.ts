@@ -1,22 +1,32 @@
-import { redirect, type Actions } from "@sveltejs/kit";
+import { redirect, type Actions, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { createPost, getPosts } from "lib/posts";
+import { createPost, getPost, getPosts, likePost, unlikePost } from "lib/posts";
 import { z } from "zod";
 import { createComment } from "lib/comments";
 import type { Post } from "@prisma/client";
+import { UploadSupabase } from "lib/storage";
+import type { User } from "lucia";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
   const feeds_pre = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
+  if (!feeds_pre || feeds_pre?.error) {
+    return {
+      error: true,
+      type: "getPosts"
+    }
+  }
   const feeds = await Promise.all(
-		feeds_pre.map(async (feed: Post) => {
-			const { data } = supabase.storage
+    feeds_pre.map(async (feed: Post) => {
+      feed.images.forEach(async (image, i) => {
+			const { data } = await supabase.storage
 				.from('velvet-line')
-				.getPublicUrl(`images/${feed.image}`);
-				feed.image = data.publicUrl;
-				return feed;
-		})
-	);
+				.getPublicUrl(`images/${image}`);
+				feed.images[i] = data.publicUrl;
+				return image;
+      })
+      return feed;
+  }));
   return {
     feeds,
     params_data
@@ -25,6 +35,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 
 export const actions: Actions = {
   like: async ({ request, locals }) => {
+    try {
     const data = await request.formData(); 
     const session = await locals.auth.validate();
 
@@ -39,6 +50,29 @@ export const actions: Actions = {
         type: "like"
       }
     }
+
+    const post = await getPost(post_id.data) as Post;
+    if (post?.error) {
+      return {
+        error: true,
+        type: "like"
+      }
+    }
+
+    const user = session.user as User;
+
+    if (post && user && user.likedPostsId.includes(post.id)) {
+      await unlikePost(post.id, user.userId);
+    } else {
+      await likePost(post.id, user.userId);
+    }
+    } catch (error) {
+        console.log(error);
+        return fail(400, {
+          error: true,
+          type: "like"
+        })
+    }
   },
 
   comment: async ({ request, locals }) => {
@@ -52,23 +86,23 @@ export const actions: Actions = {
     const post_id = normal_comment.safeParse(data.get("post_id"));
 
     if (!comment_content.success) {
-      return {
+      return fail(400, {
         error: true,
         type: "comment"
-      }
+      })
     } else if (!post_id.success) {
-      return {
+      return fail(400, {
         error: true,
         type: "comment"
-      }
+      })
     }
 
-    const newComment = await createComment(session.user.id, post_id.data, comment_content.data);
+    const newComment = await createComment(session.user.userId, post_id.data, comment_content.data);
 
-    return {
+    return fail(400, {
       error: false,
       newComment
-    }
+    })
   },
 
   newPost: async ({ request, locals }) => {
@@ -82,21 +116,45 @@ export const actions: Actions = {
     const normal_post = z.string().min(3);
 
     const post_content = normal_post.safeParse(data.get("post_content"));
-    const post_images = data.get("post_images");
-    console.log(post_images); 
+    const post_images = data.get("post_images") as File;
+    const post_images_2 = data.get("post_images_2") as File;
+
+    const images = [];
+
+    if (post_images) {
+      const img1 = await UploadSupabase(post_images, locals.supabase);
+      if (typeof img1 !== "string" && img1?.error) {
+        return fail(400, {
+          error: true,
+          type: "Image 1 upload"
+        })
+      }
+      typeof img1 === "string" && images.push(img1);
+    }
+    if (post_images_2) {
+      const img1 = await UploadSupabase(post_images, locals.supabase);
+      if (typeof img1 !== "string" && img1?.error) {
+        return fail(400, {
+          error: true,
+          type: "Image 2 upload"
+        })
+      }
+      typeof img1 === "string" && images.push(img1);
+    }
 
     if (!post_content.success) {
-      return {
+      return fail(400, {
         error: true,
         type: "newPost"
-      }
+      })
     }
 
-    const newPost = await createPost(session.user.id, post_content.data, [""]);
+    console.log(session);
+    const newPost = await createPost(session.user.userId, post_content.data, images);
 
-    return {
+    return fail(400, {
       error: false,
       newPost
-    }
+    })
   }
 }

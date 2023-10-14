@@ -1,5 +1,21 @@
 import { prisma } from "./db"
 
+export const getPost = async (postId: string) => {
+  try {
+    return await prisma.post.findUnique({
+      where: {
+        id: postId
+      }
+    })
+  } catch (error) {
+      console.log(error)
+      return {
+        error: true,
+        type: "getPost"
+      }
+  }
+}
+
 export const getPosts = async (type: "latest" | "popular" | "random", loadMore = 50, skip=0) => {
   try {
     if (type === "random") {
