@@ -15,7 +15,7 @@
 
 
   <div class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
-    <div class={`w-full absolute ${hiddenPanel ? "bottom-14" : "bottom-40"} flex justify-center`}>
+    <div class={`w-full absolute ${hiddenPanel ? "bottom-14" : "bottom-[8.5rem]"} flex justify-center`}>
       <div class="max-w-screen-xl w-full flex justify-end">
         <button on:click={() => hiddenPanel = !hiddenPanel} class="bg-gray-200 dark:bg-gray-800 text-white font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
           ↓
@@ -24,24 +24,35 @@
     </div>
     {#if !hiddenPanel}
       <form in:fly={{ y: 100 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
-      <div class="max-w-screen-xl flex flex-col w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
+      <div class="max-w-screen-xl flex flex-col gap-2 items-end w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
         <input name="post_images_count" type="hidden" value={showing.length}>
-        <div class="mb-6">
+        <div class="mb-6 w-full">
           <input name="post_content" placeholder="My thoughs..." type="text" id="default-input" class="block
                 w-full p-3 bg-transparent text-[9px] sm:text-sm rounded-full
                 text-gray-900 border-[2px] border-gray-300 focus:ring-gray-500
                 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-499">
+                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
         </div>
-        <button type="button" on:click={() => shownModal = true} class="bg-violet-500 text-white font-medium rounded-lg text-sm px-5 w-fit py-2 text-center">Add Image</button>
+        <div class="flex gap-3">
+        <button type="button" on:click={() => shownModal = true} class="bg-zinc-600 text-white p-2 font-medium rounded-lg text-sm w-fit text-center">
+          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <title>image</title>
+            <path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+          </svg>
+        </button>
         <button type="submit" class="bg-violet-800 text-white font-medium rounded-lg text-sm px-5 py-2 text-center">Submit</button>
+        </div>
       </div>
     </form>
 
   <div id="defaultModal" tabindex="-1" aria-hidden="true" class={
     `fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 
-    h-[calc(100%-1rem)] max-h-full ${shownModal ? "" : "hidden"} `}>
-      <div class="relative w-full max-w-2xl max-h-full">
+    h-[calc(100%-1rem)] max-h-full flex justify-center items-center ${shownModal ? "" : "hidden"} `}>
+      <button
+			class="w-full max-h-full cursor-default bg-black/50 h-full z-[51] absolute"
+			on:click={() => (shownModal = false)}
+		/>
+      <div class="relative w-full max-w-2xl z-[52] max-h-full">
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                   <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -65,7 +76,7 @@
               </div>
               <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <label class="cursor-pointer text-white bg-violet-700 relative hover:bg-violet-800 focus:ring-4 focus:outline-none h-full w-full focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-800 flex items-center justify-center">
-                  Choose image
+                    Add Image
                     <input
                         name="post_images_2"
                         hidden={showing.length === 0}

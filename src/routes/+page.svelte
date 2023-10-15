@@ -59,7 +59,7 @@
 <div class="w-full min-h-screen dark:bg-stone-950 text-black bg-gray-50 dark:text-white">
   <div class="max-w-screen-xl relative mx-auto p-4 flex flex-col gap-8">
     <div class="flex gap-3 justify-between">  
-      <h3 class="text-2xl font-bold ">Feeds</h3>
+      <h3 class="md:text-4xl text-2xl font-bold ">Feeds</h3>
       <div class="flex rounded-lg bg-gray-200 dark:bg-gray-700">
         <button on:click={() => goto("/?type=latest", {
             replaceState: true
@@ -71,7 +71,7 @@
           })}  class={"bg-gray-200 rounded-r-lg dark:bg-gray-700 sm:text-base max-[380px]:px-2 max-[380px]:py-1 max-[380px]:text-[11px] text-sm px-4 py-2 sm:px-6" + " " + (params_data === "random" ? "bg-gray-300 dark:bg-gray-800 rounded-lg" : "")}>Random</button>
       </div>
     </div>
-    <div class="flex flex-col gap-4 items-center h-full w-full">
+    <div class="flex flex-col pt-6 gap-4 items-center h-full w-full">
       {#if form?.error}
         <p class="text-red-500">{form?.type}</p>
       {/if}
