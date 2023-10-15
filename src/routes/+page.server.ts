@@ -6,6 +6,7 @@ import { createComment } from "lib/comments";
 import type { Post } from "@prisma/client";
 import { UploadSupabase } from "lib/storage";
 import type { User } from "lucia";
+import { wait } from "lib";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
@@ -34,7 +35,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 }
 
 export const actions: Actions = {
-  like: async ({ request, locals }) => {
+  like: async ({ request, locals, cookies }) => {
     try {
     const data = await request.formData(); 
     const session = await locals.auth.validate();
@@ -43,6 +44,20 @@ export const actions: Actions = {
 
     const normal_post_id = z.string().min(3);
     const post_id = normal_post_id.safeParse(data.get("post_id"));
+
+    let load_speed = 0;
+		const slower = cookies.get('slower');
+		if (slower) {
+			load_speed = JSON.parse(slower);
+		}
+		cookies.set('slower', JSON.stringify(load_speed + 0.05), {
+			httpOnly: true,
+			sameSite: 'strict',
+			path: '/',
+			maxAge: 60 * 60 * 12
+		});
+
+		await wait(load_speed * 1000);
 
     if (!post_id.success) {
       return {
@@ -82,7 +97,7 @@ export const actions: Actions = {
     if (!session) throw redirect(303, "/signin");
 
     const normal_comment = z.string().min(3);
-    const comment_content = normal_comment.safeParse(data.get("comment_content"));
+    const comment_content = normal_comment.safeParse(data.get("comment"));
     const post_id = normal_comment.safeParse(data.get("post_id"));
 
     if (!comment_content.success) {

@@ -1,5 +1,6 @@
 <script lang="ts">
   let shownModal = false;
+  import { fly } from "svelte/transition";
 
   async function handleFileInput(event: any) {
     if (showing.length >= 2) return error = "You can only upload 2 images";
@@ -8,23 +9,34 @@
   $: showing = [] as any[];
 
   $: error = "" as string;
+  let hiddenPanel = false;
 
 </script>
 
-<form enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
-  <div class="max-w-screen-xl flex flex-col w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
-    <input name="post_images_count" type="hidden" value={showing.length}>
-    <div class="mb-6">
-      <input name="post_content" placeholder="My thoughs..." type="text" id="default-input" class="block
-            w-full p-3 bg-transparent text-[9px] sm:text-sm rounded-full
-            text-gray-900 border-[2px] border-gray-300 focus:ring-gray-500
-            focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-            dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-499">
+
+  <div class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
+    <div class={`w-full absolute ${hiddenPanel ? "bottom-14" : "bottom-40"} flex justify-center`}>
+      <div class="max-w-screen-xl w-full flex justify-end">
+        <button on:click={() => hiddenPanel = !hiddenPanel} class="bg-gray-200 dark:bg-gray-800 text-white font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
+          ↓
+        </button>
+      </div>
     </div>
-    <button type="button" on:click={() => shownModal = true} class="bg-violet-500 text-white font-medium rounded-lg text-sm px-5 w-fit py-2 text-center">Add Image</button>
-    <button type="submit" class="bg-violet-800 text-white font-medium rounded-lg text-sm px-5 py-2 text-center">Submit</button>
-  </div>
-</form>
+    {#if !hiddenPanel}
+      <form in:fly={{ y: 100 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
+      <div class="max-w-screen-xl flex flex-col w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
+        <input name="post_images_count" type="hidden" value={showing.length}>
+        <div class="mb-6">
+          <input name="post_content" placeholder="My thoughs..." type="text" id="default-input" class="block
+                w-full p-3 bg-transparent text-[9px] sm:text-sm rounded-full
+                text-gray-900 border-[2px] border-gray-300 focus:ring-gray-500
+                focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-499">
+        </div>
+        <button type="button" on:click={() => shownModal = true} class="bg-violet-500 text-white font-medium rounded-lg text-sm px-5 w-fit py-2 text-center">Add Image</button>
+        <button type="submit" class="bg-violet-800 text-white font-medium rounded-lg text-sm px-5 py-2 text-center">Submit</button>
+      </div>
+    </form>
 
   <div id="defaultModal" tabindex="-1" aria-hidden="true" class={
     `fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 
@@ -69,3 +81,7 @@
           </div>
       </div>
   </div>
+  {:else}
+      <div class="bg-gray-200 dark:bg-gray-800 z-[-1] max-w-screen-xl rounded-lg absolute bottom-5 h-12 w-full" />      
+  {/if}
+</div>
