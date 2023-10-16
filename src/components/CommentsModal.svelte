@@ -1,63 +1,55 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
+  import { comments } from "lib/stores";
+  import guyWalking from "assets/guyWalking.jpg";
+ 	import { browser } from '$app/environment';
   export let post;
   let modalShown = false;
 
   function loadComments() {
-    post.comments = [
-      {
-        id: 1,
-        user: {
-          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-          name: "John Doe",
-          lastActive: "1 day ago",
-        },
-        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
-      },
-      {
-        id: 1,
-        user: {
-          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-          name: "John Doe",
-          lastActive: "1 day ago",
-        },
-        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
-      },
-      {
-        id: 1,
-        user: {
-          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-          name: "John Doe",
-          lastActive: "1 day ago",
-        },
-        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
-      },
-      {
-        id: 1,
-        user: {
-          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-          name: "John Doe",
-          lastActive: "1 day ago",
-        },
-        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
-      },
-      {
-        id: 1,
-        user: {
-          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80",
-          name: "John Doe",
-          lastActive: "1 day ago",
-        },
-        content: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat."
-      },
-    ]
+    showMoreComments(); 
     modalShown = true;
   }
 
-  function getComments() {
-    
-  }
+  const INITIAL_COMMENTS = 0;
+ 	let limit = INITIAL_COMMENTS;
+  let footer2: any;
 
+		if (browser && modalShown) {
+			const handleIntersect = (entries, observer) => {
+				entries.forEach((entry) => {
+					showMoreComments();
+				});
+			};
+			const options = { threshold: 0.5, rootMargin: '-100% 0% 100%' };
+			const observer = new IntersectionObserver(handleIntersect, options);
+			observer.observe(footer2);
+		}
+
+  $: error = "";
+	$: showMoreComments;
+	async function showMoreComments() {
+		try {
+			const newLimit = limit + 50;
+				const response = await fetch('/api/comments', {
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ skip: limit, take: 50, postid: post.id }),
+				});
+        const newData = await response.json();
+        if (newData.error) {
+          error = "Error happened"
+        }
+        console.log(newData);
+				comments.set([...$comments, ...newData.comments]);
+				limit = newLimit;	
+		} catch (error) {
+			console.error('Error fetching more comments in index');
+		}
+  }
 </script>
 
 <button on:click={loadComments} class="pb-2">
@@ -87,20 +79,22 @@
                   </button>
               </div>
               <div class="overflow-y-auto p-6 space-y-6 max-h-[450px] sm:max-h-[600px]">
-                {#each post.comments as comment}
+                {#each $comments as comment}
                   <div class="flex w-full items-center p-2 space-x-2">
                     <div id="toast-message-cta" class="w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow 
                       dark:bg-gray-800 dark:text-gray-400" role="alert">
                         <div class="flex">
-                            <img class="w-10 h-10 rounded-full object-center shadow-lg object-cover aspect-square" src={comment.user.image} alt={comment.user.name}/>
+                          <img class="w-10 h-10 rounded-full object-center shadow-lg object-cover aspect-square" src={
+                            comment.user.profilePicture === "no-image" ? guyWalking : comment.user.profilePicture} alt={comment.user.username}/>
                             <div class="ml-3 text-sm font-normal">
-                              <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">{comment.user.name}</span>
-                              <div class="mb-2 text-sm font-normal">{comment.content}</div> 
+                              <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">{comment.user.username}</span>
+                              <div class="mb-2 text-sm break-words font-normal">{comment.content}</div> 
                             </div>
                         </div>
                     </div>
                   </div>
                 {/each}
+                <div bind:this={footer2} />
               </div>
               <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <form method="POST" action="?/comment" class="w-full">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { messageBar } from "lib/localStorage";
   let shownModal = false;
   import { fly } from "svelte/transition";
 
@@ -9,20 +10,19 @@
   $: showing = [] as any[];
 
   $: error = "" as string;
-  let hiddenPanel = false;
 
 </script>
 
 
   <div class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
-    <div class={`w-full absolute ${hiddenPanel ? "bottom-14" : "bottom-[8.5rem]"} flex justify-center`}>
+    <div class={`w-full transition absolute ${!$messageBar.shown ? "bottom-14" : "bottom-[8.5rem]"} flex justify-center`}>
       <div class="max-w-screen-xl w-full flex justify-end">
-        <button on:click={() => hiddenPanel = !hiddenPanel} class="bg-gray-200 dark:bg-gray-800 text-white font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
+        <button on:click={() => $messageBar.shown = !$messageBar.shown} class="bg-gray-200 dark:bg-gray-800 text-white font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
           ↓
         </button>
       </div>
     </div>
-    {#if !hiddenPanel}
+    {#if $messageBar.shown}
       <form in:fly={{ y: 100 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
       <div class="max-w-screen-xl flex flex-col gap-2 items-end w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
         <input name="post_images_count" type="hidden" value={showing.length}>

@@ -6,6 +6,9 @@ export const getComments = async (postId: string, loadMore=50, skip=0) => {
       where: {
         postId
       },
+      include: {
+        user: true
+      },
       take: loadMore,
       skip: skip
     })

@@ -6,3 +6,8 @@ export const theme = persisted('theme',
   }
 )
 
+export const messageBar = persisted('messageBar',
+  {
+    shown: true
+  }
+)

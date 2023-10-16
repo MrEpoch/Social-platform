@@ -112,7 +112,9 @@ export const actions: Actions = {
       })
     }
 
-    const newComment = await createComment(session.user.userId, post_id.data, comment_content.data);
+    console.log(comment_content.data, post_id.data);
+
+    const newComment = await createComment(post_id.data, session.user.userId, comment_content.data);
 
     return fail(400, {
       error: false,
