@@ -13,7 +13,7 @@
 </svelte:head>
 
 <div class="h-full dark w-full" class:dark={$theme.current !== 'dark'}>
-    <Header />
+    <Header {data} />
     <Transition url={data.url}>
         <slot />
     </Transition>

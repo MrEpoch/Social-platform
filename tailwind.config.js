@@ -3,7 +3,11 @@ export default {
   darkMode: 'class',
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'great-vibes': ['Great Vibes', 'cursive']
+      }
+    },
   },
   plugins: [],
 }
