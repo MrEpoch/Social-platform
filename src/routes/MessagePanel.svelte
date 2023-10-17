@@ -12,24 +12,22 @@
   $: error = "" as string;
 
 </script>
-
-
   <div class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
     <div class={`w-full transition absolute ${!$messageBar.shown ? "bottom-14" : "bottom-[8.5rem]"} flex justify-center`}>
-      <div class="max-w-screen-xl w-full flex justify-end">
-        <button on:click={() => $messageBar.shown = !$messageBar.shown} class="bg-gray-200 dark:bg-gray-800 text-white font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
+      <div class="max-w-screen-xl w-full dark:text-white text-black flex justify-end">
+        <button on:click={() => $messageBar.shown = !$messageBar.shown} class="bg-gray-100 dark:bg-gray-800 font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
           ↓
         </button>
       </div>
     </div>
     {#if $messageBar.shown}
       <form in:fly={{ y: 100 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
-      <div class="max-w-screen-xl flex flex-col gap-2 items-end w-full p-3 dark:bg-gray-800 bg-gray-200 h-full rounded-lg">
+      <div class="max-w-screen-xl flex flex-col gap-2 items-end w-full p-3 dark:bg-gray-800 bg-gray-100 h-full rounded-lg">
         <input name="post_images_count" type="hidden" value={showing.length}>
         <div class="mb-6 w-full">
           <input name="post_content" placeholder="My thoughs..." type="text" id="default-input" class="block
                 w-full p-3 bg-transparent text-[9px] sm:text-sm rounded-full
-                text-gray-900 border-[2px] border-gray-300 focus:ring-gray-500
+                text-gray-900 border-[1.5px] border-gray-300 focus:ring-gray-500
                 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
         </div>

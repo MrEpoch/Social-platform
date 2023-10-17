@@ -5,7 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'great-vibes': ['Great Vibes', 'cursive']
+        'great-vibes': ['Great Vibes', 'cursive'],
+        'bayon': ['Bayon', 'cursive'],
+        'pathway-gotic-one': ['Pathway Gothic One', 'sans-serif']
       }
     },
   },

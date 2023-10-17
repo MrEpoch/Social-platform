@@ -8,11 +8,11 @@
 </script>
 
 <svelte:head>
-	<meta name="color-scheme" content={$theme.current !== "dark" ? 'dark' : 'light'} />
-  <title>Social Platform</title>
+	<meta name="color-scheme" content={$theme.current === "dark" ? 'dark' : 'light'} />
+  <title>Twovay</title>
 </svelte:head>
 
-<div class="h-full dark w-full" class:dark={$theme.current !== 'dark'}>
+<div class="h-full w-full" class:dark={$theme.current === 'dark'}>
     <Header {data} />
     <Transition url={data.url}>
         <slot />

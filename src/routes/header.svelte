@@ -13,8 +13,8 @@
 
 <header class="py-10 px-4 flex justify-between items-center dark:bg-stone-950">
   <a href="/" class="flex gap-3 items-center">
-    <img class="w-16 h-16 contrast-150 bg-gray-400 rounded-full p-2" src={Twovay} alt="" />
-    <h3 class="text-4xl pt-3 font-semibold font-great-vibes">TwoVay</h3>
+    <img class="w-16 h-16 contrast-150 bg-gray-400 p-2 rounded-lg" src={Twovay} alt="" />
+    <h3 class="text-4xl pt-3 font-bayon">TwoVay</h3>
   </a>
   {#if data.session}
     <button on:click={showMenu}>

@@ -25,7 +25,7 @@
 </script>
 
 
-<div class="flex w-full max-w-[800px] p-6 rounded-lg dark:bg-slate-800 dark:text-white bg-gray-200 flex-col gap-2">
+<div class="flex w-full max-w-[800px] p-6 rounded-lg dark:bg-slate-800 dark:text-white shadow bg-gray-50 flex-col gap-2">
   <div class="flex gap-4 items-center">
     <img class="w-16 h-16 object-cover object-center rounded-full" src={
       feed.user.profilePicture === "no-image" ? guyWalking : feed.user.profilePicture} alt="" />
