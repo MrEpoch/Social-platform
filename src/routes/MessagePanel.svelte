@@ -21,7 +21,7 @@
       </div>
     </div>
     {#if $messageBar.shown}
-      <form in:fly={{ y: 100 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
+      <form in:fly={{ y: 100, duration: 70 }} out:fly={{ y: 100 }} enctype="multipart/form-data" action="?/newPost" method="POST" class="w-full flex justify-center">
       <div class="max-w-screen-xl flex flex-col gap-2 items-end w-full p-3 dark:bg-gray-800 bg-gray-100 h-full rounded-lg">
         <input name="post_images_count" type="hidden" value={showing.length}>
         <div class="mb-6 w-full">
@@ -91,6 +91,6 @@
       </div>
   </div>
   {:else}
-      <div class="bg-gray-200 dark:bg-gray-800 z-[-1] max-w-screen-xl rounded-lg absolute bottom-5 h-12 w-full" />      
+      <div class="bg-gray-100 dark:bg-gray-800 z-[-1] max-w-screen-xl rounded-lg absolute bottom-5 h-12 w-full" />      
   {/if}
 </div>

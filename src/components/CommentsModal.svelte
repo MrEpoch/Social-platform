@@ -44,11 +44,25 @@
           error = "Error happened"
         }
         console.log(newData);
-				comments.set([...$comments, ...newData.comments]);
+        if (!$comments[post.id]) {
+          $comments[post.id] = newData.comments;
+        } else {
+          $comments[post.id] = [...$comments[post.id], ...newData.comments];
+        }
 				limit = newLimit;	
 		} catch (error) {
+    console.log(error);
 			console.error('Error fetching more comments in index');
 		}
+  }
+
+  async function submitComment(event) {
+    const data = new FormData(event.currentTarget);
+    await fetch(event.currentTarget.action, {
+      method: "POST",
+      body: data,
+    });
+    showMoreComments();
   }
 </script>
 
@@ -59,10 +73,10 @@
 {#if modalShown}
   <div in:fly={{ y: 200, duration: 500 }} out:fly={{ y: 200, duration: 500 }} tabindex="-1" aria-hidden="true" class="fixed bg-gray-100/40 
     top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden
-    md:inset-0 h-[calc(100%-1rem)] max-h-full flex items-center justify-center">
+    md:inset-0 h-full max-h-full flex items-center justify-center">
     <button
       tabindex="-1"
-			class="w-full max-h-full cursor-default bg-black/90 h-full z-[51] absolute"
+			class="w-full max-h-full cursor-default bg-black/10 dark:bg-black/90 h-full z-[51] absolute"
 			on:click={() => (modalShown = false)}
 		/>
       <div class="relative w-full max-w-2xl z-[52] max-h-full">
@@ -79,7 +93,7 @@
                   </button>
               </div>
               <div class="overflow-y-auto p-6 space-y-6 max-h-[450px] sm:max-h-[600px]">
-                {#each $comments as comment}
+                {#each $comments[post.id] ?? [] as comment}
                   <div class="flex w-full items-center p-2 space-x-2">
                     <div id="toast-message-cta" class="w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow 
                       dark:bg-gray-800 dark:text-gray-400" role="alert">
@@ -97,7 +111,7 @@
                 <div bind:this={footer2} />
               </div>
               <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <form method="POST" action="?/comment" class="w-full">
+                <form method="POST" on:submit|preventDefault={submitComment} action="?/comment" class="w-full">
                    <input type="hidden" name="post_id" value={post.id}>
                    <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                        <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">

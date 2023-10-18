@@ -9,6 +9,9 @@ export const getComments = async (postId: string, loadMore=50, skip=0) => {
       include: {
         user: true
       },
+      orderBy: {
+        createdAt: "desc"
+      },
       take: loadMore,
       skip: skip
     })

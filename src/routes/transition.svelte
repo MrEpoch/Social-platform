@@ -4,7 +4,7 @@
 </script>
 
 {#key url}
-    <div class="h-full" in:scale>
-        <slot />
+<div class="h-full" in:scale>
+    <slot />
     </div> 
 {/key}
