@@ -1,10 +1,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { homePageErr } from "lib/errTypes";
+  import type { PostWithUser } from "types/index";
 
   export let data;
   export let form;
-  let feeds = data.feeds;
+  let feeds: PostWithUser = data.feeds;
   $: params_data = data.params_data;
   $: session_data = data.session;
 

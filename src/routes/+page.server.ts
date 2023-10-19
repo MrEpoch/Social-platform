@@ -3,10 +3,10 @@ import type { PageServerLoad } from "./$types";
 import { createPost, getPost, getPosts, likePost, unlikePost } from "lib/posts";
 import { z } from "zod";
 import { createComment } from "lib/comments";
-import type { Post } from "@prisma/client";
 import { UploadSupabase } from "lib/storage";
 import type { User } from "lucia";
 import { wait } from "lib";
+import type { PostWithUser } from "types";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     }
   }
   const feeds = await Promise.all(
-    feeds_pre.map(async (feed: Post) => {
+    feeds_pre.map(async (feed: PostWithUser) => {
       feed.images.forEach(async (image, i) => {
 			const { data } = await supabase.storage
 				.from('velvet-line')
