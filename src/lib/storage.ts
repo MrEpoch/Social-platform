@@ -14,7 +14,7 @@ export async function UploadSupabase(post_images: File, supabase: SupabaseClient
 			const newImage = await post_images.arrayBuffer();
 
 			const { error } = await supabase.storage
-				.from('velvet-line')
+				.from('social-platform')
 				.upload(`images/${new_image_name}`, newImage, {
 					cacheControl: '3600'
         });

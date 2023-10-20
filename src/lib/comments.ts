@@ -1,5 +1,18 @@
 import { prisma } from "./db"
 
+export const getComment = async (commentId: string) => {
+  try {
+    return await prisma.comment.findUnique({
+      where: {
+        id: commentId
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    return false;
+  }
+}
+
 export const getComments = async (postId: string, loadMore=50, skip=0) => {
   try {
     return await prisma.comment.findMany({

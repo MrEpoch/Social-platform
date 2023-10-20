@@ -5,6 +5,13 @@ export const getPost = async (postId: string) => {
     return await prisma.post.findUnique({
       where: {
         id: postId
+      },
+      select: {
+          id: true,
+          content: true,
+          images: true,
+          user: true,
+          likeCount: true,
       }
     })
   } catch (error) {

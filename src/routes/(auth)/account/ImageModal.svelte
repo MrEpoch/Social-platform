@@ -32,10 +32,10 @@
                   </button>
               </div>
               <form action="?/upload" method="POST" enctype="multipart/form-data" class="p-6 flex flex-wrap gap-3 items-center justify-center">
-                <button class="w-full flex justify-center items-center">
+                <button type="button" class="w-full flex justify-center items-center">
                   <label class="cursor-pointer transition aspect-square object-cover object-center rounded-full text-white relative  focus:ring-4 focus:outline-none h-full w-full font-medium  text-sm  text-center  flex items-center justify-center">
                       <input
-                          name="profile_picture"
+                          name="image"
                           on:change={handleFileInput}
                           type="file" accept=".jpg, .jpeg, .png, .webp" class="hidden w-full h-full" />
                       {#if file}

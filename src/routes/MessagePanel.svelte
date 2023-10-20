@@ -15,8 +15,8 @@
   <div class="w-full fixed dark:text-white bottom-5 left-0 flex justify-center">
     <div class={`w-full transition absolute ${!$messageBar.shown ? "bottom-14" : "bottom-[8.5rem]"} flex justify-center`}>
       <div class="max-w-screen-xl w-full dark:text-white text-black flex justify-end">
-        <button on:click={() => $messageBar.shown = !$messageBar.shown} class="bg-gray-100 dark:bg-gray-800 font-medium rounded-t-[1rem] text-sm px-5 py-2 text-center">
-          ↓
+        <button on:click={() => $messageBar.shown = !$messageBar.shown} class="bg-gray-100 text-xl font-extrabold dark:bg-gray-800 rounded-full px-7 py-4 aspect-square text-center">
+          {$messageBar.shown ? "↓" : "↑"}
         </button>
       </div>
     </div>
@@ -90,7 +90,5 @@
           </div>
       </div>
   </div>
-  {:else}
-      <div class="bg-gray-100 dark:bg-gray-800 z-[-1] max-w-screen-xl rounded-lg absolute bottom-5 h-12 w-full" />      
   {/if}
 </div>

@@ -17,16 +17,25 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
       type: "getPosts"
     }
   }
-  const feeds = await Promise.all(
+
+  const feedsUserPicture = await Promise.all(
     feeds_pre.map(async (feed: PostWithUser) => {
+      const { data } = await supabase.storage
+        .from('social-platform')
+        .getPublicUrl(`images/${feed.user.profilePicture}`);
+      feed.user.profilePicture = data.publicUrl;
+  }))
+
+  const feeds = await Promise.all(
+    feedsUserPicture.map(async (feed: PostWithUser) => {
       feed.images.forEach(async (image, i) => {
 			const { data } = await supabase.storage
-				.from('velvet-line')
+				.from('social-platform')
 				.getPublicUrl(`images/${image}`);
-				feed.images[i] = data.publicUrl;
-				return image;
-      })
-      return feed;
+      feed.images[i] = data.publicUrl;
+      return image;
+    })
+    return feed;
   }));
   return {
     feeds,
