@@ -1,9 +1,9 @@
-import type { Post } from "@prisma/client";
+import type { Comment, Post, User } from "@prisma/client";
 
 export interface PostWithUser extends Post {
-  user: {
-    username: string;
-    profilePicture: string;
-    lastActive: Date;
-  };
+  user: User
+}
+
+export interface CommentWithUser extends Comment {
+  user: User
 }

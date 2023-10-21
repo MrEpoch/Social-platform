@@ -33,10 +33,7 @@ export const getComments = async (postId: string, loadMore=50, skip=0) => {
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "getComments"
-    }
+    return false; 
   }
 }
 

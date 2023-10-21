@@ -18,13 +18,17 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
     }
   }
 
+  console.log(feeds_pre);
+
   const feedsUserPicture = await Promise.all(
     feeds_pre.map(async (feed: PostWithUser) => {
       const { data } = await supabase.storage
         .from('social-platform')
         .getPublicUrl(`images/${feed.user.profilePicture}`);
       feed.user.profilePicture = data.publicUrl;
+      return feed;
   }))
+
 
   const feeds = await Promise.all(
     feedsUserPicture.map(async (feed: PostWithUser) => {

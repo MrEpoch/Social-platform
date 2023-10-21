@@ -75,7 +75,7 @@
             </tbody>
         </table>
     </div>
-    <h3 class="text-4xl pt-8 font-bayon">Most recent Posts</h3>
+    <h3 class="text-4xl pt-8 font-bayon">Most recent Comments</h3>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-900 uppercase bg-violet-400 dark:bg-violet-500">

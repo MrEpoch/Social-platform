@@ -1,10 +1,10 @@
-import { fail, type Actions } from "@sveltejs/kit";
+import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { prisma } from "lib/db";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
   const session = await locals.auth.validate();
-  const latestPosts = await prisma.post.findMany({
+  const latest = await prisma.post.findMany({
     take: 10,
     where: {
       userId: session?.user.id,
@@ -13,18 +13,9 @@ export const load: PageServerLoad = async ({ locals }) => {
       createdAt: "desc",
     }
   })
-  const latest = await Promise.all(
-    latestPosts.map(async (feed: PostWithUser) => {
-      feed.images.forEach(async (image, i) => {
-			const { data } = await locals.supabase.storage
-				.from('social-platform')
-				.getPublicUrl(`images/${image}`);
-      feed.images[i] = data.publicUrl;
-      return image;
-    })
-    return feed;
-  }));
 
+  if (!latest) throw redirect(303, "/error");
+  
   const latestComments = await prisma.comment.findMany({
     take: 10,
     where: {
@@ -35,6 +26,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
   })
 
+  if (!latestComments) throw redirect(303, "/error");
 
   return {
     latest,

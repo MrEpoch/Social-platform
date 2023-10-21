@@ -1,7 +1,9 @@
-import { json } from "@sveltejs/kit";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { json, redirect } from "@sveltejs/kit";
 import { getPosts } from "lib/posts";
+import type { PostWithUser } from "types";
 
-export async function POST({ request }) {
+export async function POST({ request, locals: { supabase } }: { request: Request, locals: { supabase: SupabaseClient } }) {
   const data = await request.json();
 
   const type = data.type;
@@ -17,5 +19,29 @@ export async function POST({ request }) {
 
   const posts = await getPosts(data.type, parseInt(take), parseInt(skip));
 
-  return json({ posts });
+  if (!posts) throw redirect(303, "/error");
+
+  const postsUserPicture = await Promise.all(
+    posts.map(async (post: PostWithUser) => {
+      const { data } = supabase.storage
+        .from('social-platform')
+        .getPublicUrl(`images/${post.user.profilePicture}`);
+      post.user.profilePicture = data.publicUrl;
+      return post;
+  }))
+
+
+  const postsWithImages = await Promise.all(
+    postsUserPicture.map(async (post: PostWithUser) => {
+      post.images.forEach(async (image: string, i: number) => {
+			const { data } = supabase.storage
+				.from('social-platform')
+				.getPublicUrl(`images/${image}`);
+      post.images[i] = data.publicUrl;
+      return image;
+    })
+    return post;
+  }));
+
+  return json({ posts: postsWithImages });
 }

@@ -1,11 +1,10 @@
 
 <script lang="ts">
-	import type { Comment } from "@prisma/client";
   import guyWalking from "assets/guyWalking.jpg";
+  import type { CommentWithUser } from "types/index";
 
   export let data;
-  const comment: Comment = data.comment;
-  console.log(comment);
+  const comment: CommentWithUser = data.comment;
 </script>
     <div class="min-h-screen w-full dark:bg-stone-950">
         <div class="relative w-full h-full">
@@ -15,7 +14,7 @@
                     dark:text-gray-400 flex justify-between h-full flex-col gap-4" role="alert">
                       <div class="flex items-center">
                         <img class="w-16 h-16 rounded-full object-center shadow-lg object-cover aspect-square" src={
-                          comment.user.profilePicture === "no-image" ? guyWalking : comment.user.profilePicture} alt={comment.user.username}/>
+                          comment?.user?.profilePicture === "no-image" ? guyWalking : comment.user.profilePicture} alt={comment.user.username}/>
                           <div class="ml-3 text-sm font-normal">
                             <span class="text-sm font-semibold text-gray-900 dark:text-white">{comment.user.username}</span>
                           </div>

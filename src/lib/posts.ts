@@ -16,10 +16,7 @@ export const getPost = async (postId: string) => {
     })
   } catch (error) {
       console.log(error)
-      return {
-        error: true,
-        type: "getPost"
-      }
+    return false; 
   }
 }
 
@@ -73,10 +70,7 @@ export const getPosts = async (type: "latest" | "popular" | "random", loadMore =
     }
   } catch (error) {
       console.log(error)
-      return {
-        error: true,
-        type: "getPosts"
-      }
+      return false;
   }
 }
 
@@ -95,10 +89,7 @@ export const createPost = async (
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "createPost"
-    }
+    return false;
   }
 }
 
@@ -121,10 +112,7 @@ export const updatePost = async (
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "updatePost"
-    }
+    return false;
   }
 }
 
@@ -140,16 +128,13 @@ export const deletePost = async (postId: string, userId: string) => {
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "deletePost"
-    }
+    return false;
   }
 }
 
 export const unlikePost = async (postId: string, userId: string) => {
   try {
-    const post = await prisma.post.update({
+    await prisma.post.update({
       where: {
         id: postId
       },
@@ -164,7 +149,7 @@ export const unlikePost = async (postId: string, userId: string) => {
         }
       },
     })
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: userId
       },
@@ -178,16 +163,13 @@ export const unlikePost = async (postId: string, userId: string) => {
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "unlikePost"
-    }
+    return false;
   }
 }
 
 export const likePost = async (postId: string, userId: string) => {
   try {
-    const post = await prisma.post.update({
+    await prisma.post.update({
       where: {
         id: postId
       },
@@ -202,7 +184,7 @@ export const likePost = async (postId: string, userId: string) => {
         }
       }
     })
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: userId
       },
@@ -216,9 +198,6 @@ export const likePost = async (postId: string, userId: string) => {
     })
   } catch (error) {
     console.log(error)
-    return {
-      error: true,
-      type: "likePost"
-    }
+    return false;
   }
 }
