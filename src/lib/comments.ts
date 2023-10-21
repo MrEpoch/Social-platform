@@ -5,6 +5,9 @@ export const getComment = async (commentId: string) => {
     return await prisma.comment.findUnique({
       where: {
         id: commentId
+      },
+      include: {
+        user: true
       }
     })
   } catch (error) {
