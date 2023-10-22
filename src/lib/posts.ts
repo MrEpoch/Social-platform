@@ -80,13 +80,20 @@ export const createPost = async (
   images: string[]
 ) => {
   try {
-    return await prisma.post.create({
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId
+      }
+    })
+
+    const post = await prisma.post.create({
       data: {
         userId,
         content,
         images
       }
     })
+    return post;
   } catch (error) {
     console.log(error)
     return false;

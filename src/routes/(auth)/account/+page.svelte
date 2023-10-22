@@ -1,6 +1,6 @@
 <script lang="ts">
   export let data;
-  import guyWalking from "assets/guyWalking.jpg";
+  import guyWalking from "assets/NoUser.svg";
 	import ImageModal from "./ImageModal.svelte";
 	import type { Comment, Post } from "@prisma/client";
 

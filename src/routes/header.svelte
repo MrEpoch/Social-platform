@@ -1,6 +1,6 @@
 
 <script lang="ts">
-  import guyWalking from "assets/guyWalking.jpg";
+  import guyWalking from "assets/NoUser.svg";
   import Twovay from "assets/TWOVAY.png";
 	import HeaderMore from "components/Header_more.svelte";
   export let data: any;

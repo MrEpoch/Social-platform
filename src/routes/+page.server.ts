@@ -10,39 +10,35 @@ import type { PostWithUser } from "types";
 
 export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
   const params_data = url.searchParams.get("type") || "latest" as "latest" | "popular" | "random";
-  const feeds_pre = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
-  if (!feeds_pre || feeds_pre?.error) {
-    return {
-      error: true,
-      type: "getPosts"
-    }
+  let feeds_pre = await getPosts(params_data as "latest" | "popular" | "random", 25, 0);
+  if (!feeds_pre) {
+    feeds_pre = [];
   }
 
-  console.log(feeds_pre);
-
-  const feedsUserPicture = await Promise.all(
-    feeds_pre.map(async (feed: PostWithUser) => {
-      const { data } = await supabase.storage
+  const postsUserPicture = await Promise.all(
+    feeds_pre.map(async (post: PostWithUser) => {
+      const { data } = supabase.storage
         .from('social-platform')
-        .getPublicUrl(`images/${feed.user.profilePicture}`);
-      feed.user.profilePicture = data.publicUrl;
-      return feed;
+        .getPublicUrl(`images/${post.user.profilePicture}`);
+      post.user.profilePicture = data.publicUrl;
+      return post;
   }))
 
 
-  const feeds = await Promise.all(
-    feedsUserPicture.map(async (feed: PostWithUser) => {
-      feed.images.forEach(async (image, i) => {
-			const { data } = await supabase.storage
+  const postsWithImages = await Promise.all(
+    postsUserPicture.map(async (post: PostWithUser) => {
+      post.images.forEach(async (image: string, i: number) => {
+			const { data } = supabase.storage
 				.from('social-platform')
 				.getPublicUrl(`images/${image}`);
-      feed.images[i] = data.publicUrl;
+      post.images[i] = data.publicUrl;
       return image;
     })
-    return feed;
+    return post;
   }));
+
   return {
-    feeds,
+    feeds: feeds_pre,
     params_data
   }
 }

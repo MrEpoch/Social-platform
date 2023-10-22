@@ -15,7 +15,9 @@
 	import MessagePanel from './MessagePanel.svelte';
 	import Post from 'components/Post.svelte';
   const INITIAL_POSTS = 25;
+  console.log(feeds);
   posts.set(feeds);
+  console.log($posts);
  	let limit = INITIAL_POSTS;
   let footer: any;
 

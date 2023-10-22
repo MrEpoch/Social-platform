@@ -5,7 +5,6 @@ import { auth } from "lib/auth";
 export const actions: Actions = {
   default: async ({ request, locals }) => {
     try {
-      console.log("default");
       const data = await request.formData();
 
       const normalUsername = z.string().min(5);
@@ -25,6 +24,7 @@ export const actions: Actions = {
           error: true
         })
       }
+      console.log(username.data.toLowerCase(), password.data);
 
       const user = await auth.createUser({
         key: {
@@ -36,6 +36,9 @@ export const actions: Actions = {
           username: username.data,
         }
       });
+
+      console.log("created");
+      console.log(user);
 
       const session = await auth.createSession({
         userId: user.userId,

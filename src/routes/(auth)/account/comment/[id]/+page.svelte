@@ -1,10 +1,11 @@
 
 <script lang="ts">
-  import guyWalking from "assets/guyWalking.jpg";
+  import guyWalking from "assets/NoUser.svg";
   import type { CommentWithUser } from "types/index";
 
   export let data;
   const comment: CommentWithUser = data.comment;
+  console.log(comment);
 </script>
     <div class="min-h-screen w-full dark:bg-stone-950">
         <div class="relative w-full h-full">

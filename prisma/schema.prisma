@@ -25,6 +25,7 @@ model User {
   comments Comment[]
   likedPosts Post[] @relation("likedBy", fields: [likedPostsId], references: [id])
 
+
   auth_session     Session[]
   key         Key[]
 }

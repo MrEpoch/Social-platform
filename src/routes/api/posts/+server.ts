@@ -20,6 +20,7 @@ export async function POST({ request, locals: { supabase } }: { request: Request
   const posts = await getPosts(data.type, parseInt(take), parseInt(skip));
 
   if (!posts) throw redirect(303, "/error");
+  console.log(posts);
 
   const postsUserPicture = await Promise.all(
     posts.map(async (post: PostWithUser) => {

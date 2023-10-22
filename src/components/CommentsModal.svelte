@@ -1,9 +1,10 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
   import { comments } from "lib/stores";
-  import guyWalking from "assets/guyWalking.jpg";
+  import guyWalking from "assets/NoUser.svg";
  	import { browser } from '$app/environment';
-  export let post;
+	import type { PostWithUser } from "types";
+  export let post: PostWithUser;
   let modalShown = false;
 
   function loadComments() {
@@ -62,11 +63,13 @@
       method: "POST",
       body: data,
     });
+    limit = INITIAL_COMMENTS;
+    $comments[post.id] = [];
     showMoreComments();
   }
 </script>
 
-<button on:click={loadComments} class="pb-2">
+<button on:click={loadComments} class="">
   <svg class="w-6 h-6 dark:text-white/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>comment-text</title><path fill="currentColor" d="M5,3H18C19.66,3 21,4.34 21,6V15C21,16.66 19.66,18 18,18H13.41L9.71,21.71C9.53,21.89 9.28,22 9,22C8.45,22 8,21.55 8,21V18H5C3.34,18 2,16.66 2,15V6C2,4.34 3.34,3 5,3M18,4H5C3.9,4 3,4.9 3,6V15C3,16.1 3.9,17 5,17H9V21L13,17H18C19.1,17 20,16.1 20,15V6C20,4.9 19.1,4 18,4M5,7H18V8H5V7M5,10H17V11H5V10M5,13H13V14H5V13Z" /></svg>
 </button>
 
