@@ -1,6 +1,7 @@
 import { fail, type Actions, redirect } from "@sveltejs/kit";
 import { z } from "zod";
 import { auth } from "lib/auth";
+import { prisma } from "lib/db";
 
 export const actions: Actions = {
   default: async ({ request, locals }) => {
@@ -25,6 +26,19 @@ export const actions: Actions = {
         })
       }
       console.log(username.data.toLowerCase(), password.data);
+
+      const exists_user = await prisma.user.findFirst({
+        where: {
+          username: username.data.toLowerCase()
+        }
+      })
+
+      if (exists_user) {
+        return fail(400, {
+          type: "username",
+          error: true
+        })
+      }
 
       const user = await auth.createUser({
         key: {

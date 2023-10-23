@@ -7,6 +7,7 @@
   let user = data.session.user;
   let shownImageModal = false;
   const latest: Post[] = data.latest;
+  console.log(data);
   const latestComments: Comment[] = data.latestComments;
   export let form;
   const image = user.profilePicture === "no-image" ? guyWalking : user.profilePicture;

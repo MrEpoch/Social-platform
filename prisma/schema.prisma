@@ -16,8 +16,8 @@ model User {
   updatedAt DateTime @updatedAt
   lastActive  DateTime @default(now())
 
-  username String  @unique
-  email    String? @unique
+  username String    
+  email    String?
   likedPostsId String[]
   profilePicture  String @default("no-image")
 
@@ -28,6 +28,7 @@ model User {
 
   auth_session     Session[]
   key         Key[]
+
 }
 
 model Session {

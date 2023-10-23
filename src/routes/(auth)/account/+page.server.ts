@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   const latest = await prisma.post.findMany({
     take: 10,
     where: {
-      userId: session?.user.id,
+      userId: session?.user.userId,
     },
     orderBy: {
       createdAt: "desc",
@@ -19,12 +19,14 @@ export const load: PageServerLoad = async ({ locals }) => {
   const latestComments = await prisma.comment.findMany({
     take: 10,
     where: {
-      userId: session?.user.id,
+      userId: session?.user.userId,
     },
     orderBy: {
       createdAt: "desc",
     }
   })
+
+  console.log(session?.user);
 
   if (!latestComments) throw redirect(303, "/error");
 

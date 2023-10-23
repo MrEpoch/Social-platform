@@ -4,6 +4,7 @@
   import Twovay from "assets/TWOVAY.png";
 	import HeaderMore from "components/Header_more.svelte";
   export let data: any;
+  console.log(data.session);
   const image = data.session?.user?.profilePicture === "no-image" ? guyWalking : data.session?.user?.profilePicture;
 
   let shownMenu = false;
